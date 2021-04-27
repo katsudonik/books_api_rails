@@ -56,3 +56,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # Making it easy to serialize models for client-side use
 gem 'active_model_serializers'
 
+# Soft Delete Library Paranoia
+gem "paranoia", "~> 2.0"
