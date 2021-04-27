@@ -47,6 +47,7 @@ group :test do
   gem 'ffaker'
   gem 'faker'
   gem 'gimei'
+  gem 'parallel_tests'
 end
 
 
