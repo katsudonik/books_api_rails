@@ -97,12 +97,12 @@ output into `tmp/failing_specs.log`
         class ExamplesController < ApplicationController
         before_action :authenticate_user!
         ```
-    - if not sign in:
+    - before sign in:
         ```
         $ curl localhost:3000/examples -X POST -d '{"title": "title_example", "body": "body_example"}' -H "content-type:application/json" -H "access-token: 6QIzZnfBzNG366P_lQHtcg" -H "client: I_y-d1XShfJdSe8utjebwg" -H "uid: example@example.com"
         {"errors":["You need to sign in or sign up before continuing."]}
         ```
-    - if sign in:
+    - after sign in:
         ```
         $ curl localhost:3000/examples -X POST -d '{"title": "title_example", "body": "body_example"}' -H "content-type:application/json" -H "access-token: 6QIzZnfBzNG366P_lQHtcg" -H "client: I_y-d1XShfJdSe8utjebwg" -H "uid: example@example.com"
         {"id": 2,"title": "title_example","body": "body_example","user": {"id": 1,"provider": "email","uid": "example@example.com","allow_password_change": false,"name": null,"nickname": null,"image": null,"email": "example@example.com","created_at": "2021-04-27T13:09:03.000Z","updated_at": "2021-04-27T13:38:40.000Z"}}
