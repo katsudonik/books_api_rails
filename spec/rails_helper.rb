@@ -20,7 +20,7 @@ require 'rspec/rails'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -30,6 +30,9 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
+ActiveJob::Base.queue_adapter = :test
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -37,7 +40,35 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  # NOTE: control by DatabaseCleaner  
+  config.use_transactional_fixtures = false
+
+  # NOTE: before running test
+  config.before(:suite) do # run at once when run the rspec command
+    DatabaseCleaner[:active_record].clean_with(:truncation) # truncate test database
+    DatabaseCleaner[:active_record].strategy = :transaction # default
+  end
+
+  # NOTE: before each rspec file
+  config.before(:all) do
+    DatabaseCleaner[:active_record].clean_with(:truncation) # truncate test database
+    DatabaseCleaner[:active_record].strategy = :transaction # revert to default
+  end
+
+  # NOTE: before each example
+  config.before(:each) do
+    DatabaseCleaner[:active_record].start # transaction -> start, truncate -> nothing
+  end
+
+  # NOTE: after each example
+  config.after(:each) do
+    DatabaseCleaner[:active_record].clean # transaction -> rollback, truncate -> truncate test database
+  end
+
+  config.after(:all) do
+    DatabaseCleaner[:active_record].clean_with(:truncation) # truncate test database
+    DatabaseCleaner[:active_record].strategy = :transaction # revert to default
+  end
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
@@ -61,4 +92,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.include FactoryBot::Syntax::Methods
+  config.include ActiveJob::TestHelper
 end
