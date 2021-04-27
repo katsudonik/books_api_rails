@@ -65,11 +65,6 @@ RSpec.configure do |config|
     DatabaseCleaner[:active_record].clean # transaction -> rollback, truncate -> truncate test database
   end
 
-  config.after(:all) do
-    DatabaseCleaner[:active_record].clean_with(:truncation) # truncate test database
-    DatabaseCleaner[:active_record].strategy = :transaction # revert to default
-  end
-
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 
