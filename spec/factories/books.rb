@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :book do
-    title { "MyString" }
-    body { "MyText" }
+    title { Faker::Book.title }
+    body { Faker::Food.description }
     user { build(:user) }
   end
 end
