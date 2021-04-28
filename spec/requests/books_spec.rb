@@ -51,7 +51,7 @@ RSpec.describe "/books", type: :request do
       end
 
       it "response data is correct" do
-        expect(response_data).to match_array([
+        expect(response_data).to match_array({"books" => [
           {
             "id" => book.id,
             "title" => book.title,
@@ -62,7 +62,7 @@ RSpec.describe "/books", type: :request do
             "title" => book2.title,
             "body" => book2.body
           },
-        ])
+        ]})
       end
     end
   end
