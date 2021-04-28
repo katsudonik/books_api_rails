@@ -8,22 +8,13 @@ RSpec.describe "/books", type: :request do
     {}.merge(auth_params)
   }
 
-  let(:valid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
   let(:valid_params) {
     { title: "title_example", body: "body_example" }
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
   }
 
   let(:invalid_params) {
     { title: "", body: "body_example" }
   }
-
 
   let(:response_data) { JSON.parse(response.body) }
 
@@ -57,6 +48,21 @@ RSpec.describe "/books", type: :request do
       end
       it "response size:2" do
         expect(response_data.length).to eq(2)
+      end
+
+      it "response data is correct" do
+        expect(response_data).to match_array({"books" => [
+          {
+            "id" => book.id,
+            "title" => book.title,
+            "body" => book.body
+          },
+          {
+            "id" => book2.id,
+            "title" => book2.title,
+            "body" => book2.body
+          },
+        ]})
       end
     end
   end

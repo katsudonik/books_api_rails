@@ -3,7 +3,12 @@ class BooksController < ApplicationController
   before_action :set_book, only: [:update, :destroy]
 
   def index
-    render json: Book.all
+    books = Book.all
+    render(
+      json: books,
+      root: 'books', 
+      adapter: :json
+    )
   end
 
   def show
