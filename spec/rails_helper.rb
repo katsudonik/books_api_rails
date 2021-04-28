@@ -90,4 +90,5 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include ActiveJob::TestHelper
+  config.include AuthorizationSpecHelper, type: :request  
 end
