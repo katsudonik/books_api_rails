@@ -91,7 +91,7 @@ output into `tmp/failing_specs.log`
     {"success":true,"data":{"id":1,"provider":"email","allow_password_change":false,"email":"example@example.com","uid":"example@example.com","name":null,"nickname":null,"image":null,"created_at":"2021-04-27T13:09:03.000Z","updated_at":"2021-04-27T13:11:15.000Z"},"message":"Your password has been successfully updated."}
     ```
 
-- authenticate custom actions
+- authorize custom actions
     - use `authenticate_user!`
         ```
         class ExamplesController < ApplicationController
