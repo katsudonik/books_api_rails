@@ -132,3 +132,15 @@ output into `tmp/failing_specs.log`
         ```
 
 - ref: https://devise-token-auth.gitbook.io/devise-token-auth/config
+
+## install rmagick in mac
+
+```
+sudo chown -R "$USER":admin /usr/local/share/
+brew uninstall --force imagemagick@6
+brew install imagemagick@6
+export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
+convert --version
+```
+
+
