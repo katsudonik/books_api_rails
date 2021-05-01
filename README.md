@@ -133,14 +133,34 @@ output into `tmp/failing_specs.log`
 
 - ref: https://devise-token-auth.gitbook.io/devise-token-auth/config
 
-## install rmagick in mac
+## install ImageMagick in mac
 
 ```
-sudo chown -R "$USER":admin /usr/local/share/
-brew uninstall --force imagemagick@6
-brew install imagemagick@6
-export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
-convert --version
+$ sudo chown -R "$USER":admin /usr/local/share/
+$ brew uninstall --force imagemagick@6
+$ brew install imagemagick
+$ brew info imagemagick
+imagemagick: stable 7.0.11-9 (bottled), HEAD [pinned at 7.0.11-9]
+Tools and libraries to manipulate images in many formats
+https://www.imagemagick.org/
+/usr/local/Cellar/imagemagick/7.0.11-9 (798 files, 24.9MB) *
+  Poured from bottle on 2021-05-02 at 01:43:31
+From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/imagemagick.rb
+License: ImageMagick
+==> Dependencies
+Build: pkg-config ✘
+Required: freetype ✔, ghostscript ✔, jpeg ✔, libheif ✔, liblqr ✔, libomp ✔, libpng ✔, libtiff ✔, libtool ✔, little-cms2 ✔, openexr ✔, openjpeg ✔, webp ✔, xz ✔
+==> Options
+--HEAD
+	Install HEAD version
+==> Analytics
+install: 186,269 (30 days), 533,382 (90 days), 2,013,167 (365 days)
+install-on-request: 152,910 (30 days), 437,480 (90 days), 1,588,102 (365 days)
+build-error: 0 (30 days)
 ```
 
+ref: https://qiita.com/Alice_ecilA/items/3dee1457ea03f5f5846b
 
+## setting s3
+
+ref: https://qiita.com/NaokiIshimura/items/b5fabc4b8bd9f54de3b4
