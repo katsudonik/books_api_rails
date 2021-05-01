@@ -9,7 +9,13 @@ RSpec.describe "/books", type: :request do
   }
 
   let(:valid_params) {
-    { title: "title_example", body: "body_example" }
+    { 
+      title: "title_example", 
+      body: "body_example", 
+      image_attributes: {
+        picture_base64: Base64.strict_encode64(File.open(::Rails.root.join('spec', 'fixtures', 'correct_1.png')).read)
+      }
+    }
   }
 
   let(:invalid_params) {
@@ -31,7 +37,7 @@ RSpec.describe "/books", type: :request do
       end
 
       it "response size:0" do
-        expect(response_data.length).to eq(0)
+        expect(response_data["books"].length).to eq(0)
       end
     end
 
@@ -47,22 +53,28 @@ RSpec.describe "/books", type: :request do
         expect(response.status).to eq(200)
       end
       it "response size:2" do
-        expect(response_data.length).to eq(2)
+        expect(response_data["books"].length).to eq(2)
       end
 
       it "response data is correct" do
-        expect(response_data).to match_array({"books" => [
+        expect(response_data["books"]).to match_array([
           {
             "id" => book.id,
             "title" => book.title,
-            "body" => book.body
+            "body" => book.body,
+            "image" => {
+              "picture_url" => anything
+            }
           },
           {
             "id" => book2.id,
             "title" => book2.title,
-            "body" => book2.body
+            "body" => book2.body,
+            "image" => {
+              "picture_url" => anything
+            }
           },
-        ]})
+        ])
       end
     end
   end
@@ -93,6 +105,7 @@ RSpec.describe "/books", type: :request do
           expect(response_data["id"]).to eq(book.id)
           expect(response_data["title"]).to eq(book.title)
           expect(response_data["body"]).to eq(book.body)
+          expect(response_data["image"]["picture_url"]).not_to eq(nil)
         end
       end
       context 'login_user not has this data' do
@@ -105,6 +118,7 @@ RSpec.describe "/books", type: :request do
           expect(response_data["id"]).to eq(book.id)
           expect(response_data["title"]).to eq(book.title)
           expect(response_data["body"]).to eq(book.body)
+          expect(response_data["image"]["picture_url"]).not_to eq(nil)
         end
       end
     end
@@ -123,6 +137,12 @@ RSpec.describe "/books", type: :request do
         }.to change(Book, :count).by(1)
       end
 
+      it "new Image is created" do
+        expect {
+          subject
+        }.to change(Image, :count).by(1)
+      end
+
       it "status:201" do
         subject
         expect(response.status).to eq(201)
@@ -133,8 +153,43 @@ RSpec.describe "/books", type: :request do
         expect(response_data["id"]).to eq(Book.last.id)
         expect(response_data["title"]).to eq(valid_params[:title])
         expect(response_data["body"]).to eq(valid_params[:body])
+        expect(response_data["image"]["picture_url"]).not_to eq(nil)
       end
     end
+
+    context "not has image parameters" do
+      let(:params) {
+        { 
+        title: "title_example", 
+        body: "body_example"
+      } }
+
+      it "new Book is created" do
+        expect {
+          subject
+        }.to change(Book, :count).by(1)
+      end
+
+      it "new Image is not created" do
+        expect {
+          subject
+        }.not_to change(Image, :count)
+      end
+
+      it "status:201" do
+        subject
+        expect(response.status).to eq(201)
+      end
+
+      it "response data is correct" do
+        subject
+        expect(response_data["id"]).to eq(Book.last.id)
+        expect(response_data["title"]).to eq(valid_params[:title])
+        expect(response_data["body"]).to eq(valid_params[:body])
+        expect(response_data["image"]).to eq(nil)
+      end
+    end
+
 
     context "with invalid parameters" do
       let(:params) { invalid_params }
@@ -143,6 +198,12 @@ RSpec.describe "/books", type: :request do
         expect {
           subject
         }.to change(Book, :count).by(0)
+      end
+
+      it "does not create a new Image" do
+        expect {
+          subject
+        }.to change(Image, :count).by(0)
       end
 
       it "status:422" do
@@ -158,22 +219,21 @@ RSpec.describe "/books", type: :request do
 
     let(:params) { valid_params }
 
-    before do
-      subject
-    end
-
     context 'has data' do
       let!(:book) { create(:book, user: login_user) }
 
       context "with valid parameters" do
         it "status:200" do
+          subject
           expect(response.status).to eq(200)
         end
 
         it "response data is correct" do
+          subject
           expect(response_data["id"]).to eq(book.id)
           expect(response_data["title"]).to eq(valid_params[:title])
           expect(response_data["body"]).to eq(valid_params[:body])
+          expect(response_data["image"]["picture_url"]).not_to eq(nil)
         end
       end
 
@@ -181,15 +241,50 @@ RSpec.describe "/books", type: :request do
         let(:params) { invalid_params }
 
         it "status:422" do
+          subject
           expect(response.status).to eq(422)
         end
       end
+
+      context 'destroy_image:true' do
+        let(:params) {
+          { 
+            destroy_image: true
+          }
+        }
+
+        it "Image is destroyed" do
+          expect {
+            subject
+          }.to change(Image, :count).by(-1)
+        end
+
+        it "Book is unchanged" do
+          expect {
+            subject
+          }.not_to change(Book, :count)
+        end
+
+        it "status:200" do
+          subject
+          expect(response.status).to eq(200)
+        end
+
+        it "response data is correct" do
+          subject
+          expect(response_data["id"]).to eq(book.id)
+          expect(response_data["title"]).to eq(book.title)
+          expect(response_data["body"]).to eq(book.body)
+          expect(response_data["image"]).to eq(nil)
+        end
+      end      
     end
 
     context 'not has data' do
       let!(:book) { create(:book) }
 
       it "status:404" do
+        subject
         expect(response.status).to eq(404)
       end
     end
@@ -206,6 +301,11 @@ RSpec.describe "/books", type: :request do
         expect {
           subject
         }.to change(Book, :count).by(-1)
+      end
+      it "Image is destroyed" do
+        expect {
+          subject
+        }.to change(Image, :count).by(-1)
       end
     end
 

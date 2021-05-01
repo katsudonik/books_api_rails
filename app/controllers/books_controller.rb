@@ -20,8 +20,9 @@ class BooksController < ApplicationController
   end
 
   def update
+    @book.image&.destroy! if params[:destroy_image]
     @book.update!(book_params)
-    render json: @book
+    render json: @book.reload
   end
 
   def destroy
@@ -34,6 +35,6 @@ class BooksController < ApplicationController
     end
 
     def book_params
-      params.permit(:title, :body)
+      params.permit(:title, :body, image_attributes: [:picture_base64])
     end
 end
