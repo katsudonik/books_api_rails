@@ -31,5 +31,11 @@ module BooksApiRails
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.paths.add 'lib', eager_load: true
+
+    config.app = {aws: {return_url: '/picture'}}
+
+    routes.default_url_options[:host] = 'http://localhost:3000'
   end
 end
