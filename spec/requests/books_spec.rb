@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "/books", type: :request do
-  let(:login_user) { create(:user) }
+  let!(:login_user) { create(:user) }
   let(:auth_params) { sign_in(login_user) }
 
   let(:valid_headers) {
@@ -276,6 +276,18 @@ RSpec.describe "/books", type: :request do
           expect(response_data["title"]).to eq(book.title)
           expect(response_data["body"]).to eq(book.body)
           expect(response_data["image"]).to eq(nil)
+        end
+
+        context "with invalid parameters" do
+          let(:params) { { 
+            destroy_image: true
+          }.merge(invalid_params) }
+
+          it "Image is not destroyed" do
+            expect {
+              subject
+            }.not_to change(Image, :count)
+          end
         end
       end      
     end

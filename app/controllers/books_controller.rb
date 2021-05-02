@@ -20,8 +20,10 @@ class BooksController < ApplicationController
   end
 
   def update
-    @book.image&.destroy! if params[:destroy_image]
-    @book.update!(book_params)
+    ActiveRecord::Base.transaction do
+      @book.image&.destroy! if params[:destroy_image]
+      @book.update!(book_params)
+    end
     render json: @book.reload
   end
 
