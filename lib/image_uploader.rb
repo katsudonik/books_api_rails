@@ -33,8 +33,6 @@ module ImageUploader
       Tempfile.create do |f|
         f.binmode
         f.write img.to_blob
-        # NOTE: ActiveStorage 側でチェックサムを生成時、filereadの情報を扱う。
-        # その時、先頭に巻き戻して置かないと正常にチェックサムが生成されないための処理。
         f.rewind
         blob&.upload f
       end
