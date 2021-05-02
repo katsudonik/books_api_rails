@@ -7,5 +7,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
 
+  has_one :image, dependent: :destroy
+  accepts_nested_attributes_for :image
+  validates_associated :image  
   has_many :books
 end
