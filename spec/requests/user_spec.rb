@@ -20,6 +20,44 @@ RSpec.describe "Users", type: :request do
 
   let(:response_data) { JSON.parse(response.body) }
 
+  describe "GET /users" do
+    subject { get users_url, headers: valid_headers, as: :json }
+
+    let!(:user2) { create(:user) }
+
+    before do
+      subject
+    end
+
+    it "status:200" do
+      expect(response.status).to eq(200)
+    end
+    it "response size:2" do
+      expect(response_data["users"].length).to eq(2)
+    end
+
+    it "response data is correct" do
+      expect(response_data["users"]).to match_array([
+        {
+          "id" => login_user.id,
+          "name" => login_user.name,
+          "nickname" => login_user.nickname,
+          "image" => {
+            "picture_url" => anything
+          }
+        },
+        {
+          "id" => user2.id,
+          "name" => user2.name,
+          "nickname" => user2.nickname,
+          "image" => {
+            "picture_url" => anything
+          }
+        },
+      ])
+    end
+  end
+
   describe "GET /users/:id" do
     let!(:user) { login_user }
 
@@ -30,7 +68,7 @@ RSpec.describe "Users", type: :request do
     end
 
     context 'not has data' do
-      let!(:user) { 1 }
+      let!(:user) { 999 }
 
       it "status:404" do
         expect(response.status).to eq(404)
@@ -58,54 +96,52 @@ RSpec.describe "Users", type: :request do
 
     let(:params) { valid_params }
 
-    context 'has data' do
-      context "with valid parameters" do
-        it "status:200" do
-          subject
-          expect(response.status).to eq(200)
-        end
-
-        it "response data is correct" do
-          subject
-          expect(response_data["id"]).to eq(user.id)
-          expect(response_data["name"]).to eq(valid_params[:name])
-          expect(response_data["nickname"]).to eq(valid_params[:nickname])
-          expect(response_data["image"]["picture_url"]).not_to eq(nil)
-        end
+    context "with valid parameters" do
+      it "status:200" do
+        subject
+        expect(response.status).to eq(200)
       end
 
-      context 'destroy_image:true' do
-        let(:params) {
-          { 
-            destroy_image: true
-          }
-        }
-
-        it "Image is destroyed" do
-          expect {
-            subject
-          }.to change(Image, :count).by(-1)
-        end
-
-        it "user is unchanged" do
-          expect {
-            subject
-          }.not_to change(User, :count)
-        end
-
-        it "status:200" do
-          subject
-          expect(response.status).to eq(200)
-        end
-
-        it "response data is correct" do
-          subject
-          expect(response_data["id"]).to eq(user.id)
-          expect(response_data["name"]).to eq(user.name)
-          expect(response_data["nickname"]).to eq(user.nickname)
-          expect(response_data["image"]).to eq(nil)
-        end
-      end      
+      it "response data is correct" do
+        subject
+        expect(response_data["id"]).to eq(user.id)
+        expect(response_data["name"]).to eq(valid_params[:name])
+        expect(response_data["nickname"]).to eq(valid_params[:nickname])
+        expect(response_data["image"]["picture_url"]).not_to eq(nil)
+      end
     end
+
+    context 'destroy_image:true' do
+      let(:params) {
+        { 
+          destroy_image: true
+        }
+      }
+
+      it "Image is destroyed" do
+        expect {
+          subject
+        }.to change(Image, :count).by(-1)
+      end
+
+      it "user is unchanged" do
+        expect {
+          subject
+        }.not_to change(User, :count)
+      end
+
+      it "status:200" do
+        subject
+        expect(response.status).to eq(200)
+      end
+
+      it "response data is correct" do
+        subject
+        expect(response_data["id"]).to eq(user.id)
+        expect(response_data["name"]).to eq(user.name)
+        expect(response_data["nickname"]).to eq(user.nickname)
+        expect(response_data["image"]).to eq(nil)
+      end
+    end      
   end
 end

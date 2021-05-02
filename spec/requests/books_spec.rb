@@ -24,7 +24,7 @@ RSpec.describe "/books", type: :request do
 
   let(:response_data) { JSON.parse(response.body) }
 
-  describe "GET /index" do
+  describe "GET /books" do
     subject { get books_url, headers: valid_headers, as: :json }
 
     context 'not has data' do
@@ -79,7 +79,7 @@ RSpec.describe "/books", type: :request do
     end
   end
 
-  describe "GET /show" do
+  describe "GET /books/:id" do
     subject { get book_url(book), headers: valid_headers, as: :json }
 
     before do
@@ -124,7 +124,7 @@ RSpec.describe "/books", type: :request do
     end
   end
 
-  describe "POST /create" do
+  describe "POST /books" do
     subject { post books_url,
                params: params, headers: valid_headers, as: :json }
 
@@ -213,7 +213,7 @@ RSpec.describe "/books", type: :request do
     end
   end
 
-  describe "PATCH /update" do
+  describe "PATCH /books/:id" do
     subject { patch book_url(book),
               params: params, headers: valid_headers, as: :json }
 
@@ -302,7 +302,7 @@ RSpec.describe "/books", type: :request do
     end
   end
 
-  describe "DELETE /destroy" do
+  describe "DELETE /books/:id" do
     subject { delete book_url(book),
               headers: valid_headers, as: :json }
 
