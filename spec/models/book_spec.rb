@@ -40,4 +40,25 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+  describe 'methods' do
+    let!(:book) { create(:book) }
+
+    describe '#update_favorite_num' do
+      context 'favorite by 2 user' do
+        before do
+          create(:favorite_book, user: create(:user), book: book)
+          create(:favorite_book, user: create(:user), book: book)
+        end
+
+        it 'favorite_num:2' do
+          expect(book.favorite_num).to eq(2)
+        end
+      end      
+      context 'favorite by 0 user' do
+        it 'favorite_num:0' do
+          expect(book.favorite_num).to eq(0)
+        end
+      end      
+    end
+  end
 end
