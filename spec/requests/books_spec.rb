@@ -44,6 +44,8 @@ RSpec.describe "/books", type: :request do
     context 'has data' do
       let!(:book) { create(:book, user: login_user) }
       let!(:book2) { create(:book) }
+      let!(:favorite_book) { create(:favorite_book, user: create(:user), book: book) }
+      let!(:favorite_book2) { create(:favorite_book, user: create(:user), book: book) }
 
       before do
         subject
@@ -62,6 +64,7 @@ RSpec.describe "/books", type: :request do
             "id" => book.id,
             "title" => book.title,
             "body" => book.body,
+            "favorite_num" => 2,
             "image" => {
               "picture_url" => anything
             }
@@ -70,6 +73,7 @@ RSpec.describe "/books", type: :request do
             "id" => book2.id,
             "title" => book2.title,
             "body" => book2.body,
+            "favorite_num" => 0,
             "image" => {
               "picture_url" => anything
             }
@@ -82,14 +86,11 @@ RSpec.describe "/books", type: :request do
   describe "GET /books/:id" do
     subject { get book_url(book), headers: valid_headers, as: :json }
 
-    before do
-      subject
-    end
-
     context 'not has data' do
       let!(:book) { 1 }
 
       it "status:404" do
+        subject
         expect(response.status).to eq(404)
       end
     end
@@ -97,27 +98,37 @@ RSpec.describe "/books", type: :request do
     context 'has data' do
       context 'login_user has this data' do
         let!(:book) { create(:book, user: login_user) }
+        let!(:favorite_book) { create(:favorite_book, user: create(:user), book: book) }
+        let!(:favorite_book2) { create(:favorite_book, user: create(:user), book: book) }
 
         it "status:200" do
+          subject
           expect(response.status).to eq(200)
         end
         it "response data is correct" do
+          subject
           expect(response_data["id"]).to eq(book.id)
           expect(response_data["title"]).to eq(book.title)
           expect(response_data["body"]).to eq(book.body)
+          expect(response_data["favorite_num"]).to eq(2)
           expect(response_data["image"]["picture_url"]).not_to eq(nil)
         end
       end
       context 'login_user not has this data' do
         let!(:book) { create(:book) }
+        let!(:favorite_book) { create(:favorite_book, user: create(:user), book: book) }
+        let!(:favorite_book2) { create(:favorite_book, user: create(:user), book: book) }
 
         it "status:200" do
+          subject
           expect(response.status).to eq(200)
         end
         it "response data is correct" do
+          subject
           expect(response_data["id"]).to eq(book.id)
           expect(response_data["title"]).to eq(book.title)
           expect(response_data["body"]).to eq(book.body)
+          expect(response_data["favorite_num"]).to eq(2)
           expect(response_data["image"]["picture_url"]).not_to eq(nil)
         end
       end
@@ -153,6 +164,7 @@ RSpec.describe "/books", type: :request do
         expect(response_data["id"]).to eq(Book.last.id)
         expect(response_data["title"]).to eq(valid_params[:title])
         expect(response_data["body"]).to eq(valid_params[:body])
+        expect(response_data["favorite_num"]).to eq(0)
         expect(response_data["image"]["picture_url"]).not_to eq(nil)
       end
     end
@@ -186,6 +198,7 @@ RSpec.describe "/books", type: :request do
         expect(response_data["id"]).to eq(Book.last.id)
         expect(response_data["title"]).to eq(valid_params[:title])
         expect(response_data["body"]).to eq(valid_params[:body])
+        expect(response_data["favorite_num"]).to eq(0)
         expect(response_data["image"]).to eq(nil)
       end
     end
@@ -233,6 +246,7 @@ RSpec.describe "/books", type: :request do
           expect(response_data["id"]).to eq(book.id)
           expect(response_data["title"]).to eq(valid_params[:title])
           expect(response_data["body"]).to eq(valid_params[:body])
+          expect(response_data["favorite_num"]).to eq(0)
           expect(response_data["image"]["picture_url"]).not_to eq(nil)
         end
       end
@@ -275,6 +289,7 @@ RSpec.describe "/books", type: :request do
           expect(response_data["id"]).to eq(book.id)
           expect(response_data["title"]).to eq(book.title)
           expect(response_data["body"]).to eq(book.body)
+          expect(response_data["favorite_num"]).to eq(0)
           expect(response_data["image"]).to eq(nil)
         end
 
