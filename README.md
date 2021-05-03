@@ -131,7 +131,7 @@ output into `tmp/failing_specs.log`
         {"id":2,"title":"title_example","body":"body_example","user":{"id":1,"provider":"email","uid":"example@example.com","allow_password_change":false,"name":null,"nickname":null,"image":null,"email":"example@example.com","created_at":"2021-04-28T02:39:38.000Z","updated_at":"2021-04-28T03:07:58.000Z"}}
         ```
 
-- ref: https://devise-token-auth.gitbook.io/devise-token-auth/config
+- ref: https://devise-token-auth.gitbook.io/devise-token-auth/
 
 ## install ImageMagick in mac
 
