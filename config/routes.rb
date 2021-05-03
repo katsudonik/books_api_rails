@@ -3,4 +3,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :books
   resources :users, only: [:index, :show, :update]
+  resources :favorite_books, param: :book_id, only: [:index, :create] do
+    member do
+      delete '/', to: 'favorite_books#destroy'
+    end
+  end
 end
