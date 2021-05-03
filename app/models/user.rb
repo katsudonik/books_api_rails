@@ -13,4 +13,5 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :image
   validates_associated :image  
   has_many :books
+  has_many :favorite_books
 end
