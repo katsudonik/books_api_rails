@@ -30,4 +30,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
-      run: bundle install --path vendor/bundle & bundle exec rake db:create & bundle exec rake db:migrate & bundle exec rspec spec 
+      run: gem install bundler && bundle install --path vendor/bundle && bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rspec spec 
