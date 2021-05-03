@@ -23,6 +23,10 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
+    container:
+      image: ruby:2.6.4
+      env:
+        MYSQL_HOST: mysql
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
