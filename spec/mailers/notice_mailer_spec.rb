@@ -10,7 +10,7 @@ RSpec.describe NoticeMailer, type: :mailer do
     end
 
     context 'when send_mail' do
-      it { expect(mail.from.first).to eq(ENV.fetch('SMTP_USERNAME')) }
+      it { expect(mail.from.first).to eq(ENV.fetch('SMTP_USERNAME', 'smtp_user_name')) }
       it { expect(mail.to.first).to eq(book.user.email) }
       it { expect(mail.subject).to eq('[Notice] your book is favorited') }
       it { expect(mail.body).to match("Dear #{book.user.name}:") }
