@@ -65,6 +65,12 @@ RSpec.describe "FavoriteBooks", type: :request do
 
     let!(:book) { create(:book) }
 
+    before do
+      notice_mailer_mock = double('NoticeMailer mock')
+      allow(notice_mailer_mock).to receive(:deliver)
+      allow(NoticeMailer).to receive(:send_favorited_your_book).and_return(notice_mailer_mock)
+    end
+
     context "with valid parameters" do
       let(:params) { { 
         book_id: book.id
@@ -74,6 +80,11 @@ RSpec.describe "FavoriteBooks", type: :request do
         expect {
           subject
         }.to change(FavoriteBook, :count).by(1)
+      end
+
+      it "send_favorited_your_book is called" do
+        subject
+        expect(NoticeMailer).to have_received(:send_favorited_your_book).with(book.user, book)
       end
 
       it "status:201" do
