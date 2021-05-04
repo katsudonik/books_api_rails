@@ -30,18 +30,18 @@ Things you may want to cover:
 
 1. Initial Setup (Create as many databases as there are processes available on the execution machine )
     ```
-    bundle exec rake parallel:setup 
+    bundle exec rake parallel:setup
     ```
 
 2. migration
     ```
     bundle exec rails db:migrate RAILS_ENV=development
-    bundle exec rails db:migrate RAILS_ENV=test   
+    bundle exec rails db:migrate RAILS_ENV=test
     ```
 
 3. reflect migrate result
     ```
-    bundle exec rake parallel:prepare 
+    bundle exec rake parallel:prepare
     ```
 
 4. run test
