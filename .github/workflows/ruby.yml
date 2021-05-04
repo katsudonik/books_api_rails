@@ -22,11 +22,12 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ROOT_PASSWORD: password
     container:
       image: ruby:2.5.7
       env:
         MYSQL_HOST: mysql
+        MYSQL_PASSWORD: password
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
