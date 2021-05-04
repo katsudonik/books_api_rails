@@ -23,6 +23,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: password
+        options: --default-authentication-plugin=mysql_native_password
     container:
       image: ruby:2.5.7
       env:
