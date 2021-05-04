@@ -6,7 +6,9 @@ class FavoriteBooksController < ApplicationController
   end
 
   def create
-    render json: current_user.favorite_books.create!(book_id: params[:book_id]), status: :created
+    favorite_book = current_user.favorite_books.create!(book_id: params[:book_id])
+    NoticeMailer.send_favorited_your_book(favorite_book.book.user, favorite_book.book).deliver
+    render json: favorite_book, status: :created
   end
 
   def destroy
