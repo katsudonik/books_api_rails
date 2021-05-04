@@ -62,3 +62,5 @@ gem 'devise_token_auth'
 
 gem 'rmagick'
 gem 'aws-sdk-s3'
+
+gem 'dotenv-rails'

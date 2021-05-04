@@ -165,3 +165,11 @@ ref: https://qiita.com/Alice_ecilA/items/3dee1457ea03f5f5846b
 
 ref: https://qiita.com/NaokiIshimura/items/b5fabc4b8bd9f54de3b4
 
+## environment variables
+
+- RAILS_MAX_THREADS
+- MYSQL_HOST
+- MYSQL_USER
+- MYSQL_PASSWORD
+- SMTP_USERNAME
+- SMTP_PASSWORD
