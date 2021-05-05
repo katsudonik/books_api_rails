@@ -5,59 +5,124 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+## Ruby version
 
-* System dependencies
+```
+2.5.7
+```
 
-* Configuration
+## System dependencies
 
-* Database creation
+- ImageMagick(7.0.10-48)
+- Mysql(8.0.22)
 
-* Database initialization
+### install ImageMagick7 in mac
 
-* How to run the test suite
+```
+$ sudo chown -R "$USER":admin /usr/local/share/
+$ brew uninstall --force imagemagick@6
+$ brew install imagemagick
+$ brew info imagemagick
+imagemagick: stable 7.0.11-9 (bottled), HEAD [pinned at 7.0.11-9]
+Tools and libraries to manipulate images in many formats
+https://www.imagemagick.org/
+/usr/local/Cellar/imagemagick/7.0.11-9 (798 files, 24.9MB) *
+Poured from bottle on 2021-05-02 at 01:43:31
+From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/imagemagick.rb
+License: ImageMagick
+==> Dependencies
+Build: pkg-config ✘
+Required: freetype ✔, ghostscript ✔, jpeg ✔, libheif ✔, liblqr ✔, libomp ✔, libpng ✔, libtiff ✔, libtool ✔, little-cms2 ✔, openexr ✔, openjpeg ✔, webp ✔, xz ✔
+==> Options
+--HEAD
+    Install HEAD version
+==> Analytics
+install: 186,269 (30 days), 533,382 (90 days), 2,013,167 (365 days)
+install-on-request: 152,910 (30 days), 437,480 (90 days), 1,588,102 (365 days)
+build-error: 0 (30 days)
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+ref: https://qiita.com/Alice_ecilA/items/3dee1457ea03f5f5846b
 
-* Deployment instructions
+## Configuration
 
-* ...
+### setting s3
 
+ref: https://qiita.com/NaokiIshimura/items/b5fabc4b8bd9f54de3b4
 
-## parallel_rspec
+### environment variables
 
-### usage
+- RAILS_MAX_THREADS
+- MYSQL_HOST
+- MYSQL_USER
+- MYSQL_PASSWORD
+- SMTP_USERNAME
+- SMTP_PASSWORD
+- CORS_ORIGIN
+
+## Database creation
+
+```
+bundle exec rake:db:create
+```
+
+## Database initialization
+
+```
+bundle exec rake:db:migrate
+```
+
+## How to run the test suite
+
+### normal
+
+```
+bundle exec rspec spec
+```
+### parallel_rspec
 
 1. Initial Setup (Create as many databases as there are processes available on the execution machine )
-    ```
-    bundle exec rake parallel:setup
-    ```
+
+```
+bundle exec rake parallel:setup
+```
 
 2. migration
-    ```
-    bundle exec rails db:migrate RAILS_ENV=development
-    bundle exec rails db:migrate RAILS_ENV=test
-    ```
+
+```
+bundle exec rails db:migrate RAILS_ENV=development
+bundle exec rails db:migrate RAILS_ENV=test
+```
 
 3. reflect migrate result
-    ```
-    bundle exec rake parallel:prepare
-    ```
+
+```
+bundle exec rake parallel:prepare
+```
 
 4. run test
-    ```
-    bundle exec parallel_rspec spec
-    ```
 
-#### specify seed
+```
+bundle exec parallel_rspec spec
+```
+
+* specify seed
 
 ```
 bundle exec parallel_rspec spec --test-options '--seed 59268'
 ```
 
-### failed log
+* failed log
+    ```
+    output into `tmp/failing_specs.log`
+    ```
 
-output into `tmp/failing_specs.log`
+## Deployment instructions
+
+### front
+
+https://github.com/katsudonik/books_front_vuejs
+
 
 ## devise-token-auth
 
@@ -133,43 +198,3 @@ output into `tmp/failing_specs.log`
 
 - ref: https://devise-token-auth.gitbook.io/devise-token-auth/
 
-## install ImageMagick in mac
-
-```
-$ sudo chown -R "$USER":admin /usr/local/share/
-$ brew uninstall --force imagemagick@6
-$ brew install imagemagick
-$ brew info imagemagick
-imagemagick: stable 7.0.11-9 (bottled), HEAD [pinned at 7.0.11-9]
-Tools and libraries to manipulate images in many formats
-https://www.imagemagick.org/
-/usr/local/Cellar/imagemagick/7.0.11-9 (798 files, 24.9MB) *
-  Poured from bottle on 2021-05-02 at 01:43:31
-From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/imagemagick.rb
-License: ImageMagick
-==> Dependencies
-Build: pkg-config ✘
-Required: freetype ✔, ghostscript ✔, jpeg ✔, libheif ✔, liblqr ✔, libomp ✔, libpng ✔, libtiff ✔, libtool ✔, little-cms2 ✔, openexr ✔, openjpeg ✔, webp ✔, xz ✔
-==> Options
---HEAD
-	Install HEAD version
-==> Analytics
-install: 186,269 (30 days), 533,382 (90 days), 2,013,167 (365 days)
-install-on-request: 152,910 (30 days), 437,480 (90 days), 1,588,102 (365 days)
-build-error: 0 (30 days)
-```
-
-ref: https://qiita.com/Alice_ecilA/items/3dee1457ea03f5f5846b
-
-## setting s3
-
-ref: https://qiita.com/NaokiIshimura/items/b5fabc4b8bd9f54de3b4
-
-## environment variables
-
-- RAILS_MAX_THREADS
-- MYSQL_HOST
-- MYSQL_USER
-- MYSQL_PASSWORD
-- SMTP_USERNAME
-- SMTP_PASSWORD
