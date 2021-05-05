@@ -8,4 +8,5 @@ Rails.application.routes.draw do
       delete '/', to: 'favorite_books#destroy'
     end
   end
+  mount ActionCable.server => '/cable'
 end

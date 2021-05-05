@@ -39,3 +39,5 @@ module BooksApiRails
     routes.default_url_options[:host] = 'http://localhost:3000'
   end
 end
+
+ActionCable.server.config.disable_request_forgery_protection = true
