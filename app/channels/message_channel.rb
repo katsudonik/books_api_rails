@@ -4,6 +4,6 @@ class MessageChannel < ApplicationCable::Channel
   end
 
   def speak(data)
-    Message.create! content: data['message']
+    ChatMessage.create! content: data['message']
   end
 end

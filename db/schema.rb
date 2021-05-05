@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_055524) do
+ActiveRecord::Schema.define(version: 2021_05_05_033556) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -45,13 +45,18 @@ ActiveRecord::Schema.define(version: 2021_05_04_055524) do
     t.index ["user_id"], name: "index_books_on_user_id"
   end
 
+  create_table "chat_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "favorite_books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "book_id"
     t.bigint "user_id"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["book_id", "user_id", "deleted_at"], name: "index_favorite_books_on_book_id_and_user_id_and_deleted_at", unique: true
     t.index ["book_id"], name: "index_favorite_books_on_book_id"
     t.index ["deleted_at"], name: "index_favorite_books_on_deleted_at"
     t.index ["user_id"], name: "index_favorite_books_on_user_id"
@@ -64,12 +69,6 @@ ActiveRecord::Schema.define(version: 2021_05_04_055524) do
     t.datetime "updated_at", null: false
     t.index ["book_id"], name: "index_images_on_book_id"
     t.index ["user_id"], name: "index_images_on_user_id"
-  end
-
-  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
