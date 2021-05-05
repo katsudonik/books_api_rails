@@ -8,4 +8,6 @@ Rails.application.routes.draw do
       delete '/', to: 'favorite_books#destroy'
     end
   end
+  resources :chat_messages, only: [:index]
+  mount ActionCable.server => '/cable'
 end

@@ -39,3 +39,5 @@ module BooksApiRails
     routes.default_url_options[:host] = 'http://localhost:3000'
   end
 end
+
+ActionCable.server.config.allowed_request_origins = ["http://localhost:8080"]
