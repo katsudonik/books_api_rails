@@ -113,6 +113,18 @@ RSpec.describe "FavoriteBooks", type: :request do
         expect(response.status).to eq(422)
       end
     end
+
+    context 'duplicated data is exist' do
+      let!(:favorite_book) { create(:favorite_book, user: login_user, book: book) }
+      let(:params) { { 
+        book_id: book.id
+      } }
+
+      it "status:422" do
+        subject
+        expect(response.status).to eq(422)
+      end
+    end
   end
 
   describe "DELETE /favorite_books/:book_id" do
